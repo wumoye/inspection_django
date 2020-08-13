@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+{% block body %}
+    <div class="login_top clearfix">
+        <a href="#" class="login_logo"></a>
+    </div>
+
+    <div class="login_form_bg">
+        {{ errmsg }}
+        <div class="login_form_wrap clearfix">
+            <div class="login_banner fl"></div>
+            <div class="login_form fr">
+                <div class="login_title clearfix">
+                    <h1>ログイン</h1>
+                    <a href="/user/register">新規登録</a>
+                </div>
+                <div class="form_input">
+                    <form action="/user/login" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="username" class="name_input" value="{{ username }}"
+                               placeholder="ユーザー名入力">
+                        <div class="user_error">入力された再度ご確認ください。</div>
+                        <input type="password" name="pwd" class="pass_input" placeholder="パスワード入力">
+                        <div class="pwd_error">入力された再度ご確認ください。</div>
+                        <div class="more_input clearfix">
+                            <input type="checkbox" name="remember" value="{{ checked }}">
+
+                            <label>test:検証なし</label>
+                            <a href="#">パスワードを忘れた方</a>
+                        </div>
+                        <input type="submit" name="" value="ログイン" class="input_submit">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

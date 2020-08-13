@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    {% block topfiles %}
+
+    {% endblock topfiles %}
+
+
+</head>
+<body>
+{% block header_con %}
+
+{% endblock header_con %}
+{% block search_bar %}
+
+{% endblock search_bar %}
+{% block body %}
+
+{% endblock body %}
+{% block bottomfiles %}
+
+{% endblock bottomfiles %}
+
+</body>
+</html>
