@@ -1,5 +1,5 @@
 /* 登录页 */
-login_top{width:960px;height:130px;margin:0 auto;}
+.login_top{width:960px;height:130px;margin:0 auto;}
 .login_logo{display:block;width:193px;height:76px;margin-top:30px;}
 .login_form_bg{height:480px;background-color:#518e17}
 .no-mp{margin-top:0px;}
@@ -10,10 +10,10 @@ login_top{width:960px;height:130px;margin:0 auto;}
 .login_title{height:60px;width:308px;margin:10px auto;border-bottom:1px solid #e0e0e0;}
 
 .login_title h1{font-size:24px;height:60px;line-height:60px;color:#a8a8a8;float:left;font-weight:bold;margin-left:44px;}
-.login_title a{width:100px;height:20px;display:block;font-size:16px;color:#5fb42a;text-indent:26px;background:url(../images/icons02.png) left 5px no-repeat;float:left;margin:20px 0 0 36px}
+.login_title a{width:100px;height:20px;display:block;font-size:16px;color:#5fb42a;text-indent:26px;background:url(../images/icons01.png) left 5px no-repeat;float:left;margin:20px 0 0 36px}
 
 .form_input{width:308px;height:250px;margin:20px auto;position:relative;}
-.name_input,.pass_input{width:306px;height:36px;border:1px solid #e0e0e0;background:url(../images/icons02.png) 280px -41px no-repeat #f8f8f8;outline:none;font-size:14px;text-indent:10px;position: absolute;left:0;top:0}
+.name_input,.pass_input{width:306px;height:36px;border:1px solid #e0e0e0;background:url(../images/icons01.png) 280px -41px no-repeat #f8f8f8;outline:none;font-size:14px;text-indent:10px;position: absolute;left:0;top:0}
 .pass_input{top:65px;background-position:280px -95px;}
 
 .user_error,.pwd_error{color:#f00;position:absolute;left:0;top:43px;display:none}
@@ -41,7 +41,7 @@ login_top{width:960px;height:130px;margin:0 auto;}
 .r_con{width:400px;}
 .reg_title{width:360px;height:50px;float:left;margin-left:30px;border-bottom:1px solid #e0e0e0}
 .reg_title h1{height:50px;line-height:50px;float:left;font-size:24px;color:#a8a8a8;font-weight:bold;}
-.reg_title a{float:right;height:20px;line-height:20px;font-size:16px;color:#5fb42a;padding-right:20px;background:url(../images/icons02.png) 35px 3px no-repeat;margin-top:15px}
+.reg_title a{float:right;height:20px;line-height:20px;font-size:16px;color:#5fb42a;padding-left:25px;background:url(../images/icons01.png) 0px 3px no-repeat;margin-top:15px}
 
 .reg_form{width:360px;margin:30px 0 0 30px;float:left;position:relative;}
 .reg_form li{height:70px;}

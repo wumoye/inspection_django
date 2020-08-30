@@ -9,7 +9,7 @@
     </div>
 
     <div class="login_form_bg">
-        {{ errmsg }}
+
         <div class="login_form_wrap clearfix">
             <div class="login_banner fl"></div>
             <div class="login_form fr">
@@ -28,12 +28,13 @@
                         <div class="more_input clearfix">
                             <input type="checkbox" name="remember" value="{{ checked }}">
 
-                            <label>test:検証なし</label>
+                            <label>ユーザー名記録</label>
                             <a href="#">パスワードを忘れた方</a>
                         </div>
                         <input type="submit" name="" value="ログイン" class="input_submit">
-                    </form>
 
+                    </form>
+                    {{ errmsg }}
                 </div>
             </div>
         </div>

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    {% block title %}テスト用{% endblock title %}
+{% endblock head %}
+{% block body %}
+    <h1>{{ username }}様、社員疲れ具合診断へようこそ^,^</h1><br>
+
+    <a href="{{ activat_message }}"><h3>リンクをクリックしてアカウントをアクティブにしてください</h3></a>
+
+{% endblock body %}

@@ -81,7 +81,7 @@ DATABASES = {
         'root': 'li',
         'PASSWORD': '123',
         'HOST': '192.168.66.128',
-        # 'HOST': '192.168.66.128',
+        # 'HOST': 'localhost',
         'PORT': 3306,
     }
 }
@@ -124,3 +124,34 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# メールの設定
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_POST = 465
+# 送信者メール
+EMAIL_HOST_USER = '304200074@qq.com'
+# メールで設定したクライアント認証パスワード
+EMAIL_HOST_PASSWORD = 'stzmlsziqybtbgei'
+# vhqdlwnvxappkimg   stzmlsziqybtbgei
+# 受信者が見た送信者
+EMAIL_FROM = 'django<304200074@qq.com>'
+
+# Django　キャッシュの設定
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1/7",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 設定session
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
