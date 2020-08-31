@@ -203,7 +203,7 @@ class MypageView(View):
 
         test_date = MeasurementResults()
         test_date.user = User.objects.get(username=username)
-        test_date.heartbeat = request.POST.get('heartbeat_test')
+
         test_date.pulse = request.POST.get('pulse_test')
         test_date.level = request.POST.get('level_test')
 

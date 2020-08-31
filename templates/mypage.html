@@ -8,16 +8,14 @@
     <table>
         <tbody>
         <tr>
-            {#            <th>データ番号</th>#}
-            <th>心拍数</th>
+            {#<th>データ番号</th>#}
             <th>脈拍数</th>
             <th>健康レベル</th>
             <th>作成時間</th>
         </tr>
         {% for measur_data in measur_datas %}
             <tr>
-                {#                <td>{{ measur_data.data_id }}</td>#}
-                <td>{{ measur_data.heartbeat }}</td>
+                {# <td>{{ measur_data.data_id }}</td>#}
                 <td>{{ measur_data.pulse }}</td>
                 <td>{{ measur_data.level }}</td>
                 <td>{{ measur_data.create_time }}</td>
@@ -30,9 +28,6 @@
         <h2>データ増加</h2><h3 style="color: red">{{errmsg}}</h3>
         <form action="/user/mypage" method="post">
             {% csrf_token %}
-            <input type="text" name="heartbeat_test"
-                   style="width:306px;height:36px;border:1px solid #e0e0e0;margin:5px;" placeholder="心拍数入力"><br>
-
             <input type="text" name="pulse_test" style="width:306px;height:36px;border:1px solid #e0e0e0;margin:5px;"
                    placeholder="脈拍数入力"><br>
 
