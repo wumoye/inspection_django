@@ -131,12 +131,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.qq.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_POST = 465
 # 送信者メール
-EMAIL_HOST_USER = '304200074@qq.com'
+EMAIL_HOST_USER = 'email@gmail.com'
 # メールで設定したクライアント認証パスワード
-EMAIL_HOST_PASSWORD = 'stzmlsziqybtbgei'
+EMAIL_HOST_PASSWORD = 'password'
 # vhqdlwnvxappkimg   stzmlsziqybtbgei
 # 受信者が見た送信者
 EMAIL_FROM = 'django<304200074@qq.com>'
