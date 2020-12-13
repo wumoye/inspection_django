@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user',
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,5 @@ CACHES = {
 # 設定session
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+LOGIN_URL='/user/login'

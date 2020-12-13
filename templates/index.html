@@ -1,0 +1,42 @@
+{% extends 'base_haveTopBar.html' %}
+{% load static %}
+{% block head %}
+{% endblock head %}
+{% block body %}
+    <div class="container-fluid homepage-container">
+        <div class="container">
+            <div class="home-content">
+                <div class="home-content-measure">
+                    <div class="form_input">
+                        <h2 class="home-content-measure-title">データ増加</h2>
+                        <form action="{% url 'user:mypage' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" 　name="pulse_test" id="pulse_test"
+                                       placeholder="脈拍数入力">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" min="0" max="5" class="form-control" name="health level" id="health level"
+                                       placeholder="健康レベル入力">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-outline-dark　btn-lg" name="" value="データ増加">データ増加</button>
+                        </form>
+                        <br>
+
+                    </div>
+                </div>
+                <div class="home-content-explain">
+                    <p>説明-------------------------------------説明</p>
+                    <p>これは疲れ検査これは疲れ検査これは疲れ検査これは疲れ検査これは疲れ検査</p>
+                    <p>これは疲れ検査これは疲れ検査これは疲れ検査これは疲れ検査これは疲れ検査</p>
+
+                </div>
+                <div class="home-result">
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock body %}

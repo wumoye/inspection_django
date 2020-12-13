@@ -4,35 +4,35 @@
 
 {% endblock head %}
 {% block body %}
-    <div class="login_top clearfix">
-        <a href="#" class="login_logo"></a>
-    </div>
-
-    <div class="login_form_bg">
-
-        <div class="login_form_wrap clearfix">
-            <div class="login_banner fl"></div>
-            <div class="login_form fr">
-                <div class="login_title clearfix">
+    <div class="container-fluid login-container">
+        <div class="logo clearfix">
+            <a href="{% url 'home:index' %}" class="logo">
+                <img src="{% static 'images/logo01.png' %}" >
+            </a>
+        </div>
+        <div class="login-content clearfix">
+            <div class="login-form fr">
+                <div class="login-title clearfix">
                     <h1>ログイン</h1>
-                    <a href="/user/register">新規登録</a>
+                    <a href="{% url 'user:register' %}">新規登録</a>
                 </div>
                 <div class="form_input">
-                    <form action="/user/login" method="post">
+                    <form method="post" id="form">
                         {% csrf_token %}
-                        <input type="text" name="username" class="name_input" value="{{ username }}"
-                               placeholder="ユーザー名入力">
-                        <div class="user_error">入力された再度ご確認ください。</div>
-                        <input type="password" name="pwd" class="pass_input" placeholder="パスワード入力">
-                        <div class="pwd_error">入力された再度ご確認ください。</div>
-                        <div class="more_input clearfix">
-                            <input type="checkbox" name="remember" value="{{ checked }}">
-
-                            <label>ユーザー名記録</label>
-                            <a href="#">パスワードを忘れた方</a>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="username" id="username"
+                                   aria-describedby="emailHelp"
+                                   placeholder="ユーザー名">
                         </div>
-                        <input type="submit" name="" value="ログイン" class="input_submit">
-
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pwd" id="pwd" placeholder="パスワード">
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                            <label class="form-check-label" for="remember">ログイン状態を保持</label>
+                            <a href="#">パスワードをお忘れの方</a>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg ">ログイン</button>
                     </form>
                     {{ errmsg }}
                 </div>

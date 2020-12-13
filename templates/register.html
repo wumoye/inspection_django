@@ -4,52 +4,47 @@
 
 {% endblock head %}
 {% block body %}
-    <div class="register_con">
-        <div class="l_con fl">
-            <a href="#" class="reg_logo"><img src="{% static 'images/login01.jpg' %}"></a>
-            <div class="reg_banner"></div>
+    <div class="container-fluid register-container">
+        <div class="logo clearfix">
+            <a href="{% url 'home:index' %}" class="logo">
+                <img src="{% static 'images/logo01.png' %}">
+            </a>
         </div>
-
-        <div class="r_con fr">
-            <div class="reg_title clearfix">
-                <h1>新規登録</h1>
-                <a href="/user/login">ログイン</a>
-            </div>
-            <div class="reg_form clearfix">
-                <form action="/user/register" method="post" id="form">
-                    {% csrf_token %}
-                    <ul>
-                        <li>
-                            <label>ユーザー名:</label>
-                            <input type="text" name="username" id="username">
-                            <span class="error_tip">msg</span>
-                        </li>
-                        <li>
-                            <label>パスワード:</label>
-                            <input type="password" name="pwd" id="pwd">
-                            <span class="error_tip">msg</span>
-                        </li>
-                        <li>
-                            <label>パスワード確認:</label>
-                            <input type="password" name="cpwd" id="cpwd">
-                            <span class="error_tip">msg</span>
-                        </li>
-                        <li>
-                            <label>メールアドレス:</label>
-                            <input type="text" name="email" id="email">
-                            <span class="error_tip">msg</span>
-                        </li>
-                        <li class="agreement">
-                            <input type="checkbox" name="allow" id="allow">
-                            <label>私はロボットではありません</label>
-                            <span class="error_tip2">msg</span>
-                        </li>
-                        <li class="reg_sub">
-                            <input type="submit" value="登　録" id="register">
-                        </li>
-                    </ul>
-                </form>
-                {{ errmsg }}
+        <div class="register-content clearfix">
+            <div class="register-form fr">
+                <div class="register_title clearfix">
+                    <h1>新規登録</h1>
+                    <a href="{% url 'user:login' %}">ログイン</a>
+                </div>
+                <div class="form_input">
+                    <form action="{% url 'user:register' %}" method="post" id="form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="username" id="username"
+                                   aria-describedby="emailHelp"
+                                   placeholder="ユーザー名">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pwd" id="pwd"
+                                   placeholder="パスワード">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="cpwd" id="cpwd"
+                                   placeholder="も一度パスワード">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   aria-describedby="emailHelp"
+                                   placeholder="メールアドレス">
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="allow" id="allow">
+                            <label class="form-check-label" for="allow">私はロボットではありません</label>
+                        </div>
+                        <button type="submit" id="register" class="btn btn-primary">登　録</button>
+                    </form>
+                    {{ errmsg }}
+                </div>
             </div>
         </div>
     </div>

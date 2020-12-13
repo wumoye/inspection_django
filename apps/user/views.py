@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.views.generic import View
 from django.urls import reverse
@@ -13,6 +13,7 @@ from itsdangerous import SignatureExpired
 import re
 
 from user.models import MeasurementResults
+from utils.mixin import LoginRequiredMixin
 
 
 # Create your views here.
@@ -61,7 +62,6 @@ class RegisterView(View):
         user.is_active = 0
         user.save()
 
-
         # アクティブなメールを送信します。リンクの有効化を含みます。http：//127.0.0.1：8000/user/active/3
         # 发送激活邮件，包含激活链接. http：//127.0.0.1：8000/user/active/3
         # リンクをアクティブにするには、ユーザの情報の識別情報が必要です。また、アイデンティティ情報を暗号化します。
@@ -75,7 +75,6 @@ class RegisterView(View):
         info = {'confirm': user.id}
         token = serializer.dumps(info)
         token = token.decode()
-
 
         # send_register_active_email.delay(email, username, token)
         # TODO　メールを送る(未完成)
@@ -157,9 +156,9 @@ class LoginView(View):
                 # ユーザのログイン状態を記録します (记录用户的登录状态)
                 login(request, user)
 
-                # ユーザーページ
-                next_url = request.GET.get('next', reverse('user:mypage'))
-
+                #
+                next_url = request.GET.get('next', reverse('home:index'))
+                print(request.GET.get('next'))
                 # ユーザーページに移動
                 response = redirect(next_url)  # HttpResponseRedirect
 
@@ -182,30 +181,58 @@ class LoginView(View):
             return render(request, 'login.html', {'errmsg': 'ユーザ名またはパスワードが間違っています'})
 
 
-
 # /user/logout
-# TODO ログアウト
+class LogoutView(View):
+    '''ログアウト'''
+
+    def get(self, request):
+        '''ログアウト'''
+        # sessionを削除
+        logout(request)
+
+        # ホームページへ
+        return redirect(reverse('home:index'))
+
+
+class UserInfoView(LoginRequiredMixin, View):
+    '''ユーザーセンター-情報'''
+
+    def get(self, request):
+        '''表示'''
+        # .is_authenticated()
+
+        return render(request, 'base_haveTopBar.html', {'user'})
+
 
 # TODO ユーザセンター：測定結果の履歴、測定結果の詳細
 
 # /user/mypage
-class MypageView(View):
+class MypageView(LoginRequiredMixin,View):
     '''ユーザーページ'''
 
     def get(self, request):
-        measur_datas = MeasurementResults.objects.all()
+        measur_datas = MeasurementResults.objects.filter()
+
         username = request.user
 
         return render(request, 'mypage.html', {'measur_datas': measur_datas, 'username': username})
 
     def post(self, request):
-        username = request.user
+        # username = request.user
+        #
+        # test_date = MeasurementResults()
+        # test_date.user = User.objects.get(username=username)
+        #
+        # test_date.pulse = request.POST.get('pulse_test')
+        # test_date.level = request.POST.get('level_test')
+        #
+        # test_date.save()
+        # return redirect(reverse('user:mypage'))
+        pass
 
-        test_date = MeasurementResults()
-        test_date.user = User.objects.get(username=username)
 
-        test_date.pulse = request.POST.get('pulse_test')
-        test_date.level = request.POST.get('level_test')
+class TestView(View):  # del
+    def get(self, request):
+        return render(request, 'test.html')
 
-        test_date.save()
-        return redirect(reverse('user:mypage'))
+

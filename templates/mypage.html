@@ -1,42 +1,32 @@
-{% extends 'base.html' %}
+{% extends 'base_haveTopBar.html' %}
 {% load static %}
 {% block head %}
 {% endblock head %}
 {% block body %}
-    <h2>{{ username }}様、お帰り </h2>
-    <br>
-    <table>
-        <tbody>
-        <tr>
-            {#<th>データ番号</th>#}
-            <th>脈拍数</th>
-            <th>健康レベル</th>
-            <th>作成時間</th>
-        </tr>
-        {% for measur_data in measur_datas %}
-            <tr>
-                {# <td>{{ measur_data.data_id }}</td>#}
-                <td>{{ measur_data.pulse }}</td>
-                <td>{{ measur_data.level }}</td>
-                <td>{{ measur_data.create_time }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <div class="form_input">
-        <h2>データ増加</h2><h3 style="color: red">{{errmsg}}</h3>
-        <form action="/user/mypage" method="post">
-            {% csrf_token %}
-            <input type="text" name="pulse_test" style="width:306px;height:36px;border:1px solid #e0e0e0;margin:5px;"
-                   placeholder="脈拍数入力"><br>
+    <div class="container-fluid mypage-container">
+        <div class="mypage-content">
+            <h2>{{ username }}様の検査履歴 </h2>
+            <br>
+            <table>
+                <tbody>
+                <tr>
+                    {#<th>データ番号</th>#}
+                    <th>脈拍数</th>
+                    <th>健康レベル</th>
+                    <th>作成時間</th>
+                </tr>
+                {% for measur_data in measur_datas %}
+                    <tr>
+                        {# <td>{{ measur_data.data_id }}</td>#}
+                        <td>{{ measur_data.pulse }}</td>
+                        <td>{{ measur_data.level }}</td>
+                        <td>{{ measur_data.create_time }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
 
-            <input type="text" name="level_test" style="width:306px;height:36px;border:1px solid #e0e0e0;margin:5px;"
-                   placeholder="健康レベル入力"><br>
-
-            <input type="submit" name="" value="データ増加" class="input_submit">
-        </form>
-        <br>
-
+        </div>
     </div>
 {% endblock body %}
