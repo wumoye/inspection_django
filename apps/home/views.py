@@ -16,13 +16,13 @@ class HomepageView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         print(user)
-        if user == "AnonymousUser":
+        if user == "AnoymousUser":
+            print("user is AnoymousUser")
             measur_datas = MeasurementResults.objects.filter()
-            user = "ゲスト"
-            return render(request, 'index.html', {'measur_datas': measur_datas})
         else:
             measur_datas = MeasurementResults.objects.filter(user=user)
-            return render(request, 'index.html', {'measur_datas': measur_datas, 'username': user})
+
+        return render(request, 'index.html', {'page': 'index', 'measur_datas': measur_datas, 'username': user})
 
     def post(self, request):
         username = request.user
@@ -35,3 +35,9 @@ class HomepageView(LoginRequiredMixin, View):
         print(f"level is {measurement_date.level}\npulse is {measurement_date.pulse}")
         measurement_date.save()
         return redirect(reverse('home:index'))
+
+class TestView(View):
+    def get(self, request):
+        user = request.user
+        measur_datas = MeasurementResults.objects.filter()
+        return render(request, 'test.html', {'page': 'index', 'measur_datas': measur_datas, 'username': user})

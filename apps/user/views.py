@@ -158,7 +158,8 @@ class LoginView(View):
 
                 #
                 next_url = request.GET.get('next', reverse('home:index'))
-                print(request.GET.get('next'))
+                print(f"get next is {request.GET.get('next')}/n next_url is {next_url}")
+
                 # ユーザーページに移動
                 response = redirect(next_url)  # HttpResponseRedirect
 

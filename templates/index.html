@@ -38,6 +38,7 @@
 
             </div>
             <div class="home_data-content">
+            {% if user.is_authenticated %}
             <h2>{{ username }}様の検査履歴 </h2>
             <br>
             <table>
@@ -59,7 +60,7 @@
                 </tbody>
             </table>
             <br>
-
+            {% endif %}
         </div>
         </div>
 
