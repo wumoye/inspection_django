@@ -1,9 +1,34 @@
 {% extends 'base_haveTopBar.html' %}
 {% load static %}
 {% block head %}
-
 {% endblock head %}
-
 {% block body %}
+    <div class="container-fluid usercenter-container">
+        <div class="usercenter-content">
+            <h2>すべての検査履歴 </h2>
+            <br>
+            <table class="usercenter-tb">
+                <tbody>
+                <tr >
+                    {#<th>データ番号</th>#}
+                    <th>脈拍数</th>
+                    <th>健康レベル</th>
+                    <th>作成時間</th>
+                    <th>ユーザー</th>
+                </tr>
+                {% for measur_data in measur_datas %}
+                    <tr>
+                        {# <td>{{ measur_data.data_id }}</td>#}
+                        <td>{{ measur_data.pulse }}</td>
+                        <td>{{ measur_data.level }}</td>
+                        <td>{{ measur_data.create_time }}</td>
+                        <td>{{ measur_data.user }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
 
+        </div>
+    </div>
 {% endblock body %}

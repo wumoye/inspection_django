@@ -37,7 +37,7 @@
                     </li>
                 </ul>
 {#                <div class="welcome fl">疲れ検査へようこそ!</div>#}
-                <div class="fr">
+                <div class="top-bar">
                     {% if user.is_authenticated %}
                         <div class="login_btn fl">
                             <a>お帰り:</a><em>{{ user.username }}</em>
@@ -53,7 +53,7 @@
                     {% endif %}
                     <div class="user_link fl">
                         <span>|</span>
-                        <a href="{% url 'user:mypage' %}">ユーザーセンター</a>
+                        <a href="{% url 'user:usercenter' %}">ユーザーセンター</a>
 
 {#                        <span>|</span>#}
 {#                        <a href="/cart">我的购物车</a>#}

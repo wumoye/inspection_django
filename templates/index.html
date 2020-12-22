@@ -9,14 +9,15 @@
                 <div class="home-content-measure">
                     <div class="form_input">
                         <h2 class="home-content-measure-title">データ増加</h2>
-                        <form action="{% url 'user:mypage' %}" method="post">
+{#                        <form action="{% url 'user:index' %}" method="post">#}
+                        <form method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" 　name="pulse_test" id="pulse_test"
+                                <input type="text" class="form-control" name="pulse" id="pulse"
                                        placeholder="脈拍数入力">
                             </div>
                             <div class="form-group">
-                                <input type="number" min="0" max="5" class="form-control" name="health level" id="health level"
+                                <input type="number" min="0" max="5" class="form-control" name="health_level" id="health_level"
                                        placeholder="健康レベル入力">
                             </div>
                             <button type="submit" class="btn btn-primary btn-outline-dark　btn-lg" name="" value="データ増加">データ増加</button>
@@ -36,6 +37,30 @@
                 </div>
 
             </div>
+            <div class="home_data-content">
+            <h2>{{ username }}様の検査履歴 </h2>
+            <br>
+            <table>
+                <tbody>
+                <tr>
+                    {#<th>データ番号</th>#}
+                    <th>脈拍数</th>
+                    <th>健康レベル</th>
+                    <th>作成時間</th>
+                </tr>
+                {% for measur_data in measur_datas %}
+                    <tr>
+                        {# <td>{{ measur_data.data_id }}</td>#}
+                        <td>{{ measur_data.pulse }}</td>
+                        <td>{{ measur_data.level }}</td>
+                        <td>{{ measur_data.create_time }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+
+        </div>
         </div>
 
     </div>

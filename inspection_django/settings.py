@@ -79,10 +79,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'inspection_django',
-        'root': 'li',
-        'PASSWORD': '123',
-        'HOST': '192.168.66.128',
-        # 'HOST': 'localhost',
+        'USER': 'techc_django@fcheckserver',
+        'PASSWORD': '12161216',
+        # 'HOST': '127.0.0.1',
+        'HOST': 'fcheckserver.mysql.database.azure.com',
         'PORT': 3306,
     }
 }
@@ -146,9 +146,10 @@ EMAIL_FROM = 'django<304200074@qq.com>'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1/7",
+        "LOCATION": "rediss://fcheckserver.redis.cache.windows.net:6380/0",  # abortConnect=Falseはどこで設定するか？
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "FQiVOaZxkKzMuWLRHLk3cQ91gVKyvSwW17REHFTa0e0=",
         }
     }
 }
@@ -157,4 +158,4 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-LOGIN_URL='/user/login'
+LOGIN_URL = '/user/'

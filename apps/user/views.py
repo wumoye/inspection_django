@@ -12,7 +12,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 import re
 
-from user.models import MeasurementResults
+from home.models import MeasurementResults
 from utils.mixin import LoginRequiredMixin
 
 
@@ -89,7 +89,7 @@ class RegisterView(View):
         print(s)
 
         # 応答を返して、トップページにジャンプします (返回应答,跳转到首页)
-        # return render(request, 'mypage.html', {'username': username})
+        # return render(request, 'usercent.html', {'username': username})
 
         # テスト用---start
         activat_message = 'http://127.0.0.1:8000/user/active/%s' % token
@@ -204,30 +204,17 @@ class UserInfoView(LoginRequiredMixin, View):
         return render(request, 'base_haveTopBar.html', {'user'})
 
 
-# TODO ユーザセンター：測定結果の履歴、測定結果の詳細
+# TODO ユーザセンター：パスワードの変更、ユーザー情報の変更
+#測定結果の履歴、測定結果の詳細
 
-# /user/mypage
-class MypageView(LoginRequiredMixin,View):
-    '''ユーザーページ'''
-
+class UserCenterView(LoginRequiredMixin,View):
     def get(self, request):
         measur_datas = MeasurementResults.objects.filter()
 
         username = request.user
 
-        return render(request, 'mypage.html', {'measur_datas': measur_datas, 'username': username})
-
-    def post(self, request):
-        # username = request.user
-        #
-        # test_date = MeasurementResults()
-        # test_date.user = User.objects.get(username=username)
-        #
-        # test_date.pulse = request.POST.get('pulse_test')
-        # test_date.level = request.POST.get('level_test')
-        #
-        # test_date.save()
-        # return redirect(reverse('user:mypage'))
+        return render(request, 'usercenter.html', {'measur_datas': measur_datas, 'username': username})
+    def post(self,request):
         pass
 
 
