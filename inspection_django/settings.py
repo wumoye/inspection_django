@@ -26,7 +26,7 @@ SECRET_KEY = '81!09ka_$2suxvpr5y_j!@dy%3xxs*!+vdo%rg-43qt_gcrpt0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
 # Application definition
 
