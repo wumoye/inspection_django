@@ -40,7 +40,7 @@
                 <div class="top-bar">
                     {% if user.is_authenticated %}
                         <div class="login_btn fl">
-                            <a>お帰り:</a><em>{{ user.username }}</em>
+                            <a>お帰り:</a><em>{{ nickname }}</em>
                             <span>|</span>
                             <a href="{% url 'user:logout' %}">ログアウト</a>
                         </div>
@@ -56,10 +56,6 @@
 {#                        <a href="{% url 'user:usercenter' %}">ユーザーセンター</a>#}
                         <a href="#">ユーザーセンター</a>
 
-{#                        <span>|</span>#}
-{#                        <a href="/cart">我的购物车</a>#}
-{#                        <span>|</span>#}
-{#                        <a href="{% url 'user:order' %}">我的订单</a>#}
                     </div>
                 </div>
             </div>

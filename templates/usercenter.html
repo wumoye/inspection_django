@@ -16,13 +16,13 @@
                     <th>作成時間</th>
                     <th>ユーザー</th>
                 </tr>
-                {% for measur_data in measur_datas %}
+                {% for data in measurements_data %}
                     <tr>
                         {# <td>{{ measur_data.data_id }}</td>#}
-                        <td>{{ measur_data.pulse }}</td>
-                        <td>{{ measur_data.level }}</td>
-                        <td>{{ measur_data.create_time }}</td>
-                        <td>{{ measur_data.user }}</td>
+                        <td>{{ data.pulse }}</td>
+                        <td>{{ data.level }}</td>
+                        <td>{{ data.create_time }}</td>
+                        <td>{{ nickname }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

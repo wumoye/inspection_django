@@ -26,7 +26,8 @@ SECRET_KEY = '81!09ka_$2suxvpr5y_j!@dy%3xxs*!+vdo%rg-43qt_gcrpt0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
 # Application definition
 
@@ -87,6 +88,19 @@ DATABASES = {
     }
 }
 
+# # localhost
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'inspection_jango',
+#         'USER': 'li',
+#         'PASSWORD': '123',
+#         # 'HOST': '127.0.0.1',
+#         'HOST': 'localhost',
+#         'PORT': 3306,
+#     }
+# }
+
 AUTH_USER_MODEL = 'user.User'
 
 # Password validation
@@ -124,7 +138,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    ('css', os.path.join(STATIC_ROOT, 'css')),
+    ('js', os.path.join(STATIC_ROOT, 'js')),
+    ('images', os.path.join(STATIC_ROOT, 'images')),
+
+]
 
 # メールの設定
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -153,6 +173,17 @@ CACHES = {
         }
     }
 }
+
+# # localhost
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1/9",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
 # 設定session
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"

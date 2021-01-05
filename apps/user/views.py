@@ -1,10 +1,11 @@
+from django.db import transaction
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.views.generic import View
 from django.urls import reverse
 from django.http import HttpResponse
-from user.models import User
+from user.models import User, UserInfo
 from django.conf import settings
 
 from celery_tasks.tasks import send_register_active_email
@@ -12,7 +13,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 import re
 
-from home.models import MeasurementResults
+from home.models import MeasurementsResults
 from utils.mixin import LoginRequiredMixin
 
 
@@ -47,19 +48,28 @@ class RegisterView(View):
             return render(request, 'register.html', {'errmsg': 'ロボットですか？'})
         # ユーザの業務処理を検証します。ユーザ登録を行います。(校验用户业务处理:进行用户注册)
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(identifier=username)
         except User.DoesNotExist:
-            # ユーザ名が存在しません (用户名不存在)
+            # ユーザが存在しません (用户不存在)
             user = None
+            print(f'user is none')
         if user:
             return render(request, 'register.html', {'errmsg': 'ユーザ名は既に存在します'})
+        try:
+            check_email = UserInfo.objects.get(email=email)
+        except UserInfo.DoesNotExist:
+            check_email = None
+            print(f'email is none')
+        print(f'user is {type(user)},email is {type(check_email)}')
+        if check_email:
+            return render(request, 'register.html', {'errmsg': 'メールは既に存在します'})
 
         if passwordc != password:
             return render(request, 'register.html', {'errmsg': 'パスワードが一致しません'})
 
         # 業務処理 (进行业务处理)
-        user = User.objects.create_user(username, email, password)
-        user.is_active = 0
+        user = User.objects.create_user(username=username, password=password, identity_type=1, email=email)
+        # user.is_active = 0
         user.save()
 
         # アクティブなメールを送信します。リンクの有効化を含みます。http：//127.0.0.1：8000/user/active/3
@@ -72,7 +82,7 @@ class RegisterView(View):
         # 加密用户的身份信息，生成激活token
         # TODO (完成)
         serializer = Serializer(settings.SECRET_KEY, 3600)
-        info = {'confirm': user.id}
+        info = {'confirm': user.user_id}
         token = serializer.dumps(info)
         token = token.decode()
 
@@ -102,6 +112,7 @@ class ActiveView(View):
 
     def get(self, request, token):
         ''' アクティブ '''
+        username = request.GET.get('username')
         # 復号を行い、アクティブにするユーザ情報を取得
         serializer = Serializer(settings.SECRET_KEY, 3600)
         try:
@@ -109,15 +120,23 @@ class ActiveView(View):
 
             # アクティブにするユーザのIDを取得
             user_id = info['confirm']
+            with transaction.atomic():
+                # IDからユーザ情報を取得
+                # user = User.objects.get(id=user_id)
+                userinfo = UserInfo.objects.get(id=user_id)
+                userinfo.is_active = True
+                userinfo.save()
+                user = User.objects.get(user_id=userinfo.id)
+                user.is_active = userinfo.is_active
+                user.save()
 
-            # IDからユーザ情報を取得
-            user = User.objects.get(id=user_id)
-            user.is_active = 1
-            user.save()
             return redirect(reverse('user:login'))
         except SignatureExpired as e:
             '''リンクの有効期限が切れました'''
             return HttpResponse('リンクの有効期限が切れました')
+        except Exception as e:
+            print(f"error is :{e}")
+            return HttpResponse(f"error is :{e}")
 
 
 # /user/login
@@ -130,12 +149,14 @@ class LoginView(View):
         #  ユーザ名を覚えているかどうかを判断します (判断是否记住了用户名)
         if 'username' in request.COOKIES:
             username = request.COOKIES.get('username')
+            nickname = request.COOKIES.get('nickname')
             checked = 'checked'
         else:
             username = ''
+            nickname = ''
             checked = ''
         # テンプレートを使う
-        return render(request, 'login.html', {'username': username, 'checked': checked})
+        return render(request, 'login.html', {'username': username, 'nickname': nickname, 'checked': checked})
 
     def post(self, request):
         '''ログイン検証 (登录校验)'''
@@ -150,12 +171,18 @@ class LoginView(View):
         # 業務処理：登録チェック (业务处理：登录校验)
         user = authenticate(username=username, password=password)
         if user is not None:
+            print(f"user is not None")
+
             # the password verified for the user
+
             if user.is_active:
+                print(f"user.is_active is true")
                 # ユーザがアクティブになりました (用户已激活)
                 # ユーザのログイン状態を記録します (记录用户的登录状态)
+                print(f'username is {user.get_username()}, password is {user.password}')
                 login(request, user)
 
+                print(f"requrest.user is {user.get_username()}")
                 #
                 next_url = request.GET.get('next', reverse('home:index'))
                 print(f"get next is {request.GET.get('next')}/n next_url is {next_url}")
@@ -167,13 +194,17 @@ class LoginView(View):
                 remember = request.POST.get('remember')
                 if remember is None:
                     response.delete_cookie('username')
+                    response.delete_cookie('nickname')
                 else:
                     # 記録ユーザ名(记住用户名)
+                    userinfo = UserInfo.objects.get(id=user.user_id)
+                    nickname = userinfo.nickname
                     response.set_cookie('username', username, max_age=7 * 24 * 3600)
+                    response.set_cookie('nickname', nickname, max_age=7 * 24 * 3600)
                 # 戻る(返回)response
                 return response
             else:
-
+                print(f"user.is_active is false")
                 # ユーザがアクティブではありません (用户未激活)
                 return render(request, 'login.html', {'errmsg': 'ユーザがアクティブではありません'})
 
@@ -206,21 +237,20 @@ class UserInfoView(LoginRequiredMixin, View):
 
 
 # TODO ユーザセンター：パスワードの変更、ユーザー情報の変更
-#測定結果の履歴、測定結果の詳細
+# 測定結果の履歴、測定結果の詳細
 
-class UserCenterView(LoginRequiredMixin,View):
+class UserCenterView(LoginRequiredMixin, View):
     def get(self, request):
-        measur_datas = MeasurementResults.objects.filter()
+        measur_datas = MeasurementsResults.objects.filter()
 
         username = request.user
 
         return render(request, 'usercenter.html', {'measur_datas': measur_datas, 'username': username})
-    def post(self,request):
+
+    def post(self, request):
         pass
 
 
 class TestView(View):  # del
     def get(self, request):
         return render(request, 'test.html')
-
-

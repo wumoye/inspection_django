@@ -13,7 +13,7 @@
                         <form method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" name="pulse" id="pulse"
+                                <input type="number" min="0" max="200" class="form-control" name="pulse" id="pulse"
                                        placeholder="脈拍数入力">
                             </div>
                             <div class="form-group">
@@ -39,7 +39,7 @@
             </div>
             <div class="home_data-content">
             {% if user.is_authenticated %}
-            <h2>{{ username }}様の検査履歴 </h2>
+            <h2>{{ nickname }}様の検査履歴 </h2>
             <br>
             <table>
                 <tbody>
@@ -49,12 +49,12 @@
                     <th>健康レベル</th>
                     <th>作成時間</th>
                 </tr>
-                {% for measur_data in measur_datas %}
+                {% for data in measurements_data %}
                     <tr>
                         {# <td>{{ measur_data.data_id }}</td>#}
-                        <td>{{ measur_data.pulse }}</td>
-                        <td>{{ measur_data.level }}</td>
-                        <td>{{ measur_data.create_time }}</td>
+                        <td>{{ data.pulse }}</td>
+                        <td>{{ data.level }}</td>
+                        <td>{{ data.create_time }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
