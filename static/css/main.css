@@ -137,3 +137,69 @@
 .top-bar a:hover, a:active {
     color: black;
 }
+
+/*login page by password and fingerprint start*/
+.form_input {
+    width: 300px;
+    height: 300px;
+    left: 10px;
+    top: 10px;
+    position: relative;
+    perspective: 800px;
+    margin: 20px auto;
+}
+.login-flip{
+    width: 48px;
+    height: 48px;
+    left: 10px;
+    top: 10px;
+    position: relative;
+    perspective: 800px;
+    margin: 20px auto;
+    float: right;
+}
+.login-flip:hover{
+ transform: scale(0.9);
+}
+#card,#login-img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    /*border: 1px solid red;*/
+}
+
+#card > div,#login-img > img {
+    margin: 0;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+#card .login_by_pw {
+    /*border: 1px solid red;*/
+    /*    background: red;*/
+}
+
+#card .login_by_fp,#login-img .by-password{
+    /*    background: blue;*/
+    /*border: 1px solid blue;*/
+    transform: rotateY(180deg);
+}
+
+#card.flipped,#login-img.flipped {
+    transform: rotateY(180deg);
+}
+.reset_password{
+    float: right;
+}
+
+
+.left-20{
+    left: -20px;
+}
+
+/*login page by password and fingerprint end*/

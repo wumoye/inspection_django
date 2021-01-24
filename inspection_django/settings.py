@@ -76,30 +76,30 @@ WSGI_APPLICATION = 'inspection_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inspection_django',
-        'USER': 'techc_django@fcheckserver',
-        'PASSWORD': '12161216',
-        # 'HOST': '127.0.0.1',
-        'HOST': 'fcheckserver.mysql.database.azure.com',
-        'PORT': 3306,
-    }
-}
-
-# # localhost
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'inspection_jango',
-#         'USER': 'li',
-#         'PASSWORD': '123',
+#         'NAME': 'inspection_django',
+#         'USER': 'techc_django@fcheckserver',
+#         'PASSWORD': '12161216',
 #         # 'HOST': '127.0.0.1',
-#         'HOST': 'localhost',
+#         'HOST': 'fcheckserver.mysql.database.azure.com',
 #         'PORT': 3306,
 #     }
 # }
+
+# localhost
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'inspection_jango',
+        'USER': 'li',
+        'PASSWORD': '123',
+        # 'HOST': '127.0.0.1',
+        'HOST': 'localhost',
+        'PORT': 3306,
+    }
+}
 
 AUTH_USER_MODEL = 'user.User'
 

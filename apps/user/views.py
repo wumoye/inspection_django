@@ -16,19 +16,25 @@ import re
 from home.models import MeasurementsResults
 from utils.mixin import LoginRequiredMixin
 
+from django.contrib.auth.backends import ModelBackend
+from user import models
+from django.db.models import Q
+
+import hashlib
+
 
 # Create your views here.
 
 # /user/register
 class RegisterView(View):
-    '''登録 (注册)'''
+    """登録"""
 
     def get(self, request):
-        '''登録ページを表示 (显示注册页面)'''
+        """登録ページを表示"""
         return render(request, 'register.html')
 
     def post(self, request):
-        '''登録処理 (进行注册处理)'''
+        """登録処理"""
         # データを受け入れる (接受数据)
         username = request.POST.get('username')
         password = request.POST.get('pwd')
@@ -108,10 +114,10 @@ class RegisterView(View):
 
 
 class ActiveView(View):
-    '''アカウントをアクティブ'''
+    """アカウントをアクティブ"""
 
     def get(self, request, token):
-        ''' アクティブ '''
+        """アクティブ"""
         username = request.GET.get('username')
         # 復号を行い、アクティブにするユーザ情報を取得
         serializer = Serializer(settings.SECRET_KEY, 3600)
@@ -141,12 +147,41 @@ class ActiveView(View):
 
 # /user/login
 class LoginView(View):
-    '''ログイン (登录)'''
+    """ログイン (登录)"""
+
+    def my_authenticate(self, request, username=None, password=None):
+        try:
+            user = User.objects.get(identifier=username)
+        except Exception as e:
+            user = None
+        if not user:
+            try:
+                userinfo = UserInfo.objects.get(email=username)
+                user_id = userinfo.id
+                user = User.objects.get(user=user_id)
+            except Exception as e:
+                user = None
+                print(f'user none.erro is {e}')
+        if user and user.check_password(password):
+            return user
+        else:
+            return None
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
+    def get_nickname(self, user_id):
+        try:
+            return UserInfo.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
 
     def get(self, request):
-        '''ログインページを表示 (显示登录页面)'''
-
-        #  ユーザ名を覚えているかどうかを判断します (判断是否记住了用户名)
+        """ログインページの表示"""
+        #  ユーザ名を覚えているかどうかを判断する
         if 'username' in request.COOKIES:
             username = request.COOKIES.get('username')
             nickname = request.COOKIES.get('nickname')
@@ -159,20 +194,37 @@ class LoginView(View):
         return render(request, 'login.html', {'username': username, 'nickname': nickname, 'checked': checked})
 
     def post(self, request):
-        '''ログイン検証 (登录校验)'''
-        # データ受信(接收数据)
-        username = request.POST.get('username')
-        password = request.POST.get('pwd')
-
-        # データ検証 (校验数据)
+        """ログイン検証"""
+        # データ受信
+        username = ''
+        password = ''
+        fingerprint_key = ''
+        identity_type = request.POST.get('identity_type')
+        print(f'identity_type is {identity_type}')
+        print(type(identity_type))
+        if identity_type is '1':  # login by password
+            print(f'start get name and password')
+            username = request.POST.get('username')
+            password = request.POST.get('pwd')
+        elif identity_type is '2':
+            pass
+        elif identity_type is '3':  # login by fingerprint
+            fingerprint_key = 'Set_Key'
+            username = request.POST.get('fingerprint')
+            name_to_pw = username + fingerprint_key
+            password = hashlib.md5(name_to_pw.encode()).hexdigest()
+        # データ検証
+        print(f'name is {username},pass is {password}')
         if not all([username, password]):
             return render(request, 'login.html', {'errmsg': 'データが不完全'})
+        print(username, password, fingerprint_key)
+        finger = request.POST.get('fingerprint')
+        print(f'fing is {finger}')
+        # 業務処理：登録チェック
+        user = self.my_authenticate(request, username=username, password=password)
 
-        # 業務処理：登録チェック (业务处理：登录校验)
-        user = authenticate(username=username, password=password)
         if user is not None:
             print(f"user is not None")
-
             # the password verified for the user
 
             if user.is_active:
@@ -215,10 +267,10 @@ class LoginView(View):
 
 # /user/logout
 class LogoutView(View):
-    '''ログアウト'''
+    """ログアウト"""
 
     def get(self, request):
-        '''ログアウト'''
+        """ログアウト"""
         # sessionを削除
         logout(request)
 
@@ -227,10 +279,10 @@ class LogoutView(View):
 
 
 class UserInfoView(LoginRequiredMixin, View):
-    '''ユーザーセンター-情報'''
+    """ユーザーセンター-情報"""
 
     def get(self, request):
-        '''表示'''
+        """表示"""
         # .is_authenticated()
 
         return render(request, 'base_haveTopBar.html', {'user'})

@@ -10,12 +10,12 @@ class UserInfo(BaseModel):
         (3, "秘密")
     )
     id = models.AutoField(primary_key=True, verbose_name='ユーザーID')
-    nickname = models.CharField(max_length=13, verbose_name="昵称", null=True, blank=True)
+    nickname = models.CharField(max_length=13, verbose_name="ニックネーム", null=True, blank=True)
     email = models.EmailField(verbose_name="メールアドレス", unique=True)
     age = models.IntegerField(verbose_name="年齢", null=True, blank=True)
     gender = models.CharField(max_length=2, choices=GENDER_TYPE, verbose_name="性別", null=True, blank=True)
-    avatar = models.ImageField(upload_to="Store/user_picture", verbose_name="用户头像", null=True, blank=True)
-    is_active = models.BooleanField(default=False, verbose_name="激活状态")
+    avatar = models.ImageField(upload_to="Store/user_picture", verbose_name="アバター", null=True, blank=True)
+    is_active = models.BooleanField(default=False, verbose_name="アクティブ状態")
 
     class Meta:
         db_table = 'my_user_info'

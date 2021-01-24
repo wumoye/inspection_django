@@ -18,7 +18,8 @@ class HomepageView(LoginRequiredMixin, View):
             print("user is AnoymousUser")
             measurements_data = MeasurementsResults.objects.filter()
         else:
-            nick_name = request.COOKIES.get('nickname')
+            userinfo = UserInfo.objects.get(id=user.user_id)
+            nick_name = userinfo.nickname
             measurements_data = MeasurementsResults.objects.filter(user=user.user_id)
 
         return render(request, 'index.html',
@@ -40,8 +41,10 @@ class HomepageView(LoginRequiredMixin, View):
 class TestView(View):
     def get(self, request):
         user = request.user
-        nickname = request.COOKIES.get('nickname')
+        nick_name = request.COOKIES.get('nickname')
+        # userinfo = UserInfo.objects.get(id=user.user_id)
+        # nick_name = userinfo.nickname
         measurements_data = MeasurementsResults.objects.all().select_related()
 
         return render(request, 'test.html',
-                      {'page': 'test', 'measurements_data': measurements_data, 'nickname': nickname})
+                      {'page': 'test', 'measurements_data': measurements_data, 'nickname': nick_name})
