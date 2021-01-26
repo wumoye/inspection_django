@@ -3,32 +3,139 @@
 {% block head %}
 {% endblock head %}
 {% block body %}
-    <div class="container-fluid usercenter-container">
-        <div class="usercenter-content">
-            <h2>すべての検査履歴 </h2>
-            <br>
-            <table class="usercenter-tb">
-                <tbody>
-                <tr >
-                    {#<th>データ番号</th>#}
-                    <th>脈拍数</th>
-                    <th>健康レベル</th>
-                    <th>作成時間</th>
-                    <th>ユーザー</th>
-                </tr>
-                {% for data in measurements_data %}
-                    <tr>
-                        {# <td>{{ measur_data.data_id }}</td>#}
-                        <td>{{ data.pulse }}</td>
-                        <td>{{ data.level }}</td>
-                        <td>{{ data.create_time }}</td>
-                        <td>{{ nickname }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <br>
+    {#    <div class="container-fluid usercenter-container">#}
+    <div class="container ">
+        {#        <div class="usercenter-content">#}
+        {##}
+        {#        </div>#}
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">ユーザー情報
+                        </button>
+                    </h2>
+                </div>
 
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group col-md-6 my-1">
+                                <label class="sr-only" for="usercent_change_nikename">ニックネーム</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">ニックネーム</div>
+                                    </div>
+                                    <input type="text" class="form-control" id="usercent_change_nikename"
+                                           placeholder="ニックネーム">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group col-md-6 my-1">
+                                <label class="sr-only" for="usercent_change_email">メールアドレス</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">メールアドレス</div>
+                                    </div>
+                                    <input type="text" class="form-control" id="usercent_change_email"
+                                           placeholder="メールアドレス">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group col-sm-2 my-1">
+                                <label class="sr-only" for="usercent_change_email">年齢</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">年齢</div>
+                                    </div>
+                                    <input type="number" min="0" max="200" class="form-control"
+                                           id="usercent_change_age"
+                                           placeholder="年齢">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group col-sm-2 my-1">
+                                <label class="sr-only" for="usercent_change_gender">性別</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">性別</div>
+                                    </div>
+                                    <select class="custom-select  " id="usercent_change_gender">
+                                        <option value="1">男性</option>
+                                        <option value="2">女性</option>
+                                        <option value="3" selected>秘密</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed text-dark" type="button" data-toggle="collapse"
+                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            セキュリティ情報
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group col-sm-4 my-1">
+                                <label class="sr-only" for="usercent_change_password">パスワード</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">パスワード</div>
+                                    </div>
+                                    <input type="password" class="form-control" id="usercent_change_password"
+                                           placeholder="パスワード">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group col-sm-3 my-1">
+                                <label class="sr-only" for="inlineFormInputGroupUsername">指紋</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">指紋</div>
+                                    </div>
+                                    <input type="image" src="{% static 'images/fingerprint.png' %}" alt="指紋"
+                                           class="rounded-circle ">
+
+                                </div>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-primary">変更</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed text-dark" type="button" data-toggle="collapse"
+                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            健康履歴
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                     data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="modal-body">
+                            <div class="container-fluid">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 {% endblock body %}

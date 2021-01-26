@@ -12,15 +12,20 @@ from utils.mixin import LoginRequiredMixin
 class HomepageView(LoginRequiredMixin, View):
     """ホームページ"""
 
+    def get_nickname(self, request):
+        user = request.user
+        userinfo = UserInfo.objects.get(id=user.user_id)
+        nick_name = userinfo.nickname
+        return nick_name
+
     def get(self, request):
         user = request.user
         if user == "AnoymousUser":
             print("user is AnoymousUser")
-            measurements_data = MeasurementsResults.objects.filter()
+            # measurements_data = MeasurementsResults.objects.filter()
         else:
-            userinfo = UserInfo.objects.get(id=user.user_id)
-            nick_name = userinfo.nickname
-            measurements_data = MeasurementsResults.objects.filter(user=user.user_id)
+            nick_name = self.get_nickname(request)
+            measurements_data = MeasurementsResults.objects.filter(user=user.user_id).order_by("-create_time")
 
         return render(request, 'index.html',
                       {'page': 'index', 'measurements_data': measurements_data, 'nickname': nick_name})
@@ -34,6 +39,12 @@ class HomepageView(LoginRequiredMixin, View):
         measurements_data.level = request.POST.get('health_level')
         measurements_data.pulse = request.POST.get('pulse')
         print(f"level is {measurements_data.level}\npulse is {measurements_data.pulse}")
+        if not all([measurements_data.level, measurements_data.pulse]):
+            nick_name = self.get_nickname(request)
+            measurements_data = MeasurementsResults.objects.filter(user=user.user_id).order_by("-create_time")
+            return render(request, 'index.html',
+                          {'page': 'index', 'measurements_data': measurements_data, 'nickname': nick_name,
+                           'errmsg': 'データが不完全'})
         measurements_data.save()
         return redirect(reverse('home:index'))
 
@@ -42,9 +53,16 @@ class TestView(View):
     def get(self, request):
         user = request.user
         nick_name = request.COOKIES.get('nickname')
+        if nick_name is None:
+            nick_name = request.COOKIES.get('username')
         # userinfo = UserInfo.objects.get(id=user.user_id)
         # nick_name = userinfo.nickname
         measurements_data = MeasurementsResults.objects.all().select_related()
 
         return render(request, 'test.html',
                       {'page': 'test', 'measurements_data': measurements_data, 'nickname': nick_name})
+
+
+class Test2View(View):
+    def get(self, request):
+        return render(request, 'test2.html')

@@ -5,20 +5,24 @@
 {% endblock head %}
 {% block body %}
     <div class="container-fluid login-container">
-
         <div class="logo clearfix">
             <a href="{% url 'home:test' %}" class="logo">
-                <img src="{% static 'images/logo01.png' %}">
+                <img class="rounded-pill rounded-sm" src="{% static 'images/this-is-fine.gif' %}">
             </a>
         </div>
+
         <div class="login-content clearfix">
             <div class="login-form fr">
+
                 <div class="login-title clearfix">
+
                     <div class="login-flip ">
                         <a id="flip" href="">
                             <div id="login-img">
-                                <img class="by-finger" src="{% static 'images/fingerprint.png' %}" alt="" data-toggle="tooltip" data-placement="top" title="指紋でログイン">
-                                <img class="by-password" src="{% static 'images/login-by-password.png' %}" alt="" data-toggle="tooltip" data-placement="top" title="パスワードでログイン">
+                                <img class="by-finger" src="{% static 'images/fingerprint.png' %}" alt=""
+                                     data-toggle="tooltip" data-placement="top" title="指紋でログイン">
+                                <img class="by-password" src="{% static 'images/login-by-password.png' %}" alt=""
+                                     data-toggle="tooltip" data-placement="top" title="パスワードでログイン">
                             </div>
                         </a>
                     </div>
@@ -48,6 +52,8 @@
                                 <input type="hidden" name="identity_type" value="1">
                                 <button type="submit" class="btn btn-primary ">ログイン</button>
                             </form>
+                            <p>テストアカウント：</p>
+                            <p>username:lee   password:111<br>username:lee2   password:111</p>
                         </div>
                         <div class="login_by_fp">
                             <form method="post" id="form2">

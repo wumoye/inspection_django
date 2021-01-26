@@ -148,7 +148,8 @@
     perspective: 800px;
     margin: 20px auto;
 }
-.login-flip{
+
+.login-flip {
     width: 48px;
     height: 48px;
     left: 10px;
@@ -158,10 +159,12 @@
     margin: 20px auto;
     float: right;
 }
-.login-flip:hover{
- transform: scale(0.9);
+
+.login-flip:hover {
+    transform: scale(0.9);
 }
-#card,#login-img {
+
+#card, #login-img {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -170,7 +173,7 @@
     /*border: 1px solid red;*/
 }
 
-#card > div,#login-img > img {
+#card > div, #login-img > img {
     margin: 0;
     display: block;
     position: absolute;
@@ -184,22 +187,29 @@
     /*    background: red;*/
 }
 
-#card .login_by_fp,#login-img .by-password{
+#card .login_by_fp, #login-img .by-password {
     /*    background: blue;*/
     /*border: 1px solid blue;*/
     transform: rotateY(180deg);
 }
 
-#card.flipped,#login-img.flipped {
+#card.flipped, #login-img.flipped {
     transform: rotateY(180deg);
 }
-.reset_password{
+
+.reset_password {
     float: right;
 }
 
 
-.left-20{
+.left-20 {
     left: -20px;
 }
 
 /*login page by password and fingerprint end*/
+
+.test2-width {
+    width: 400px;
+
+
+}

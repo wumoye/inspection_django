@@ -4,9 +4,11 @@
     {% block title %}テスト用{% endblock title %}
 {% endblock head %}
 {% block body %}
-    <div class="">
-    <h1>{{ username }}様、社員疲れ具合診断へようこそ^,^</h1><br>
+    <div class="container-fluid usercenter-container">
+        <div class="usercenter-content">
+            <h2>{{ username }}様、社員疲れ具合診断へようこそ^,^</h2><br>
 
-    <a href="{{ activat_message }}"><h3>リンクをクリックしてアカウントをアクティブにしてください</h3></a>
-</div>
+            <a href="{{ activat_message }}"><h3>リンクをクリックしてアカウントをアクティブにしてください</h3></a>
+        </div>
+    </div>
 {% endblock body %}
