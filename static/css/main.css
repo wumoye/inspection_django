@@ -1,6 +1,6 @@
 /* ログイン 登録*/
 
-.login-container:after, .register-container:after, .usercenter-container:after {
+.login-container:after, .register-container:after, .data-show-container:after {
     content: "";
     width: 100%;
     height: 100%;
@@ -49,11 +49,11 @@
     background: url("../images/bg-register.jpg") no-repeat fixed;
 }
 
-.usercenter-container {
+.data-show-container {
     background: url("../images/bg-usercenter.jpg") no-repeat fixed;
 }
 
-.login-container, .register-container, .usercenter-container {
+.login-container, .register-container, .data-show-container {
     width: auto;
     height: 935px;
     position: relative;
@@ -71,8 +71,8 @@
 }
 
 .home-content-measure {
-    width: 450px;
-    height: 250px;
+    width:550px;
+    height: 300px;
     padding: 5px;
     margin: 10px;
     border: 1px darkgray solid;
@@ -99,12 +99,12 @@
     margin: 10px;
     padding: 5px;
     float: right;
-    border: 1px darkgray solid;
+    /*border: 1px darkgray solid;*/
     border-radius: 10px;
 }
 
-.home_data-content, .usercenter-content {
-    width: 480px;
+.home_data-content, .data-show-content {
+    width: 420px;
     left: 10%;
     top: 50%;
     border-radius: 10px;
@@ -118,15 +118,11 @@
     transform: translate(-50%, -50%);
 }
 
-.usercenter-content {
-    width: 510px;
+.data-show-content {
+    width: 1480px;
+    height: 780px;
     left: 50%;
     z-index: 11;
-}
-
-.usercenter-tb {
-    border-collapse: collapse;
-    border-spacing: 2px 15px;
 }
 
 .top-bar a {
@@ -141,12 +137,12 @@
 /*login page by password and fingerprint start*/
 .form_input {
     width: 300px;
-    height: 300px;
+    height: 350px;
     left: 10px;
     top: 10px;
     position: relative;
     perspective: 800px;
-    margin: 20px auto;
+    /*margin: 10px auto;*/
 }
 
 .login-flip {
@@ -208,8 +204,89 @@
 
 /*login page by password and fingerprint end*/
 
-.test2-width {
-    width: 400px;
+table{
+    width: 100%;
+    border-collapse:separate;
+    border-spacing: 0;
+  }
 
+  table th:first-child{
+    border-radius: 5px 0 0 0;
+  }
+
+  table th:last-child{
+    border-radius: 0 5px 0 0;
+    border-right: 1px solid #3c6690;
+  }
+
+  table th{
+    text-align: center;
+    color:white;
+    background: linear-gradient(#829ebc,#225588);
+    border-left: 1px solid #3c6690;
+    border-top: 1px solid #3c6690;
+    border-bottom: 1px solid #3c6690;
+    box-shadow: 0px 1px 1px rgba(255,255,255,0.3) inset;
+    width: 25%;
+    padding: 10px 0;
+  }
+
+  table td{
+    text-align: center;
+    border-left: 1px solid #a8b7c5;
+    border-bottom: 1px solid #a8b7c5;
+    border-top:none;
+    box-shadow: 0px -3px 5px 1px #eee inset;
+    width: 25%;
+    padding: 10px 0;
+  }
+
+  table td:last-child{
+    border-right: 1px solid #a8b7c5;
+  }
+
+  table tr:last-child td:first-child {
+    border-radius: 0 0 0 5px;
+  }
+
+  table tr:last-child td:last-child {
+    border-radius: 0 0 5px 0;
+  }
+
+.modal-dialog-centered > table{
+    width:400px;
+    height:500px;
+
+}
+
+.form-group.col-sm-6.my-1 > p{
+    margin-top: 30px;
+    text-align:center;
+}
+
+
+
+.show-data-a {
+    display: inline-block;
+    margin: 0 0 5px;
+    width: 78.5px;
+    height: 58.5px;
+    background-color: #5a6268;
+    border-radius: 15px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 3.2;
+    transition-duration: 0.2s;
+    transition-property: background-color;
+    transition-timing-function: ease;
+    text-align: center;
+    padding: 1px;
+}
+
+.show-data-a:hover {
+    background-color: #fff;
+    color: #5a6268;
 
 }

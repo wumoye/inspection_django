@@ -159,9 +159,8 @@ EMAIL_POST = 465
 EMAIL_HOST_USER = 'email@gmail.com'
 # メールで設定したクライアント認証パスワード
 EMAIL_HOST_PASSWORD = 'password'
-# vhqdlwnvxappkimg   stzmlsziqybtbgei
 # 受信者が見た送信者
-EMAIL_FROM = 'django<304200074@qq.com>'
+EMAIL_FROM = 'django<django@mail.com>'
 
 # Django　キャッシュの設定
 CACHES = {
@@ -191,3 +190,5 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 LOGIN_URL = '/user/login'
+
+FINGERPRINT_KEY = 'Set_Key'

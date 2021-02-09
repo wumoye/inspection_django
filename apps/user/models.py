@@ -27,10 +27,10 @@ class UserInfo(BaseModel):
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, username, password, identity_type, email, **kwargs):
+    def _create_user(self, username, password, identity_type, email, finger_name=None, finger_password=None, **kwargs):
         # if not identity_type:
         #     raise ValueError("ログイン方法を選択してください！")
-
+        print(kwargs)
         if not username:
             raise ValueError("ユーザー名を入力してください！")
         if not password:
@@ -42,6 +42,14 @@ class UserManager(BaseUserManager):
                 userinfo = UserInfo(nickname=username, email=email)
                 userinfo.save()
                 user_id = UserInfo.objects.get(id=userinfo.id)
+
+                if (finger_name and finger_password) is not None:
+                    print(f'finger_name is {finger_name},finger_password is {finger_password}.')
+                    user_finger_register = User(user=user_id, identity_type=3,
+                                                identifier=finger_name, **kwargs)
+                    user_finger_register.set_password(finger_password)
+                    user_finger_register.is_active = userinfo.is_active
+                    user_finger_register.save()
                 user = User(user=user_id, identity_type=identity_type, identifier=username, **kwargs)
                 user.set_password(password)
                 user.is_active = userinfo.is_active
@@ -51,14 +59,19 @@ class UserManager(BaseUserManager):
         except Exception as e:
             print(f"error is :{e}")
 
-    def create_user(self, username, password, identity_type, email, **kwargs):
+    def create_user(self, username, password, identity_type, email, finger_name=None, finger_password=None, **kwargs):
         kwargs['is_superuser'] = False
-        return self._create_user(username, password, identity_type, email, **kwargs)
+        return self._create_user(username, password, identity_type, email, finger_name=finger_name,
+                                 finger_password=finger_password,
+                                 **kwargs)
 
-    def create_superuser(self, username, password, identity_type, email, **kwargs):
+    def create_superuser(self, username, password, identity_type, email, finger_name=None, finger_password=None,
+                         **kwargs):
         kwargs['is_superuser'] = True
         kwargs['is_staff'] = True
-        return self._create_user(username, password, identity_type, email, **kwargs)
+        return self._create_user(username, password, identity_type, email, finger_name=finger_name,
+                                 finger_password=finger_password,
+                                 **kwargs)
 
 
 # |auths_id     |user_id		|identity_type	|identifier			|password      |
