@@ -1,10 +1,12 @@
+import json
+
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.views.generic import View
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict
 from user.models import User, UserInfo
 from django.conf import settings
 
@@ -25,13 +27,77 @@ import hashlib
 
 # Create your views here.
 
+def name_to_psw(input_name):
+    fingerprint_key = settings.FILE_CHARSET
+    name_to_pw = str(input_name) + fingerprint_key
+    return hashlib.md5(name_to_pw.encode()).hexdigest()
+
+
+def con_status():
+    fingerprint_sensor_state = False
+    is_connect = True
+    if is_connect:
+        fingerprint_sensor_state = True
+    return fingerprint_sensor_state
+
+
+def get_finger_code():
+    """指紋の番号の獲得"""
+    fingerprint_code = -1
+    if con_status():
+        # get fingerprint code
+        if True:
+            fingerprint_code = 10
+        else:
+            fingerprint_code = -1
+
+    return fingerprint_code
+
+
+def get_finger_data(ret):
+    try:
+        finger_code = get_finger_code()
+        print(f'finger code is {finger_code}')
+        if finger_code is None:
+            ret['status'] = False
+            ret['error'] = '指紋検測失敗1'
+        if finger_code < 0:
+            ret['status'] = False
+            ret['error'] = '指紋検測失敗2'
+        else:
+            ret['status'] = True
+            ret['error'] = ''
+            ret['finger_code'] = str(finger_code)
+    except Exception as e:
+        ret['status'] = False
+        # ret['error'] = '指紋検測失敗3'
+        ret['error'] = str(e)
+        print(f'error is {e}')
+    print(f'data is {ret}')
+    return ret
+
+
 # /user/register
 class RegisterView(View):
     """登録"""
 
     def get(self, request):
         """登録ページを表示"""
-        return render(request, 'register.html')
+        fingerprint_sensor_status = con_status()
+        print(fingerprint_sensor_status)
+        finger_check_but_statue = request.GET.get('fingerRegister')
+        finger_data = request.GET.get('fingerData')
+        if finger_data is None:
+            finger_data = ''
+        if finger_check_but_statue is not None:
+            print(f'start get~~~~~~~~~~~~')
+            ret = {'status': 'True', 'error': None, 'username': request.GET.get('username'),
+                   'email': request.GET.get('email'), 'finger_code': None}
+
+            ret = get_finger_data(ret)
+            print('sussecc')
+            return HttpResponse(json.dumps(ret))
+        return render(request, 'register.html', {'is_connect': fingerprint_sensor_status, 'finger_data': finger_data})
 
     def post(self, request):
         """登録処理"""
@@ -41,17 +107,58 @@ class RegisterView(View):
         passwordc = request.POST.get('cpwd')
         email = request.POST.get('email')
         allow = request.POST.get('allow')
+        is_finger_register = request.POST.get('fingerRegister')
+        finger_name = request.POST.get('fingerData')
 
-        print([username, password, email, allow])
-        # データ検証 (进行数据校验)
-        if not all([username, password, email]):
-            # データが不完全 (数据不完整)
-            return render(request, 'register.html', {'errmsg': 'データが不完全'})
+        # data_json = json.loads(request.body)
+        data = QueryDict(request.get_full_path())
+        # data = QueryDict(request.get_full_path().split('?')[1])
+        # finger_name2 = data_json.get('fingerData')
+        print(data)
+        print(request.body)
+
+        print(f'finger is {finger_name},finger2 is {finger_name}')
+        if finger_name is None:
+            finger_name = ''
+
+        finger_password = None
+        identity_types = [1]
+        fingerprint_sensor_status = con_status()
+        print(f'is_finger_register is {is_finger_register}.type is {type(is_finger_register)}')
+
+        if is_finger_register == 'on':
+            finger_password = name_to_psw(finger_name)
+            print([is_finger_register, finger_name, finger_password, username, password, email, allow])
+            # データ検証 (进行数据校验)
+            if not all([finger_name, username, password, email]):
+                # データが不完全 (数据不完整)
+
+                return render(request, 'register.html',
+                              {'errmsg': 'データが不完全', 'is_connect': fingerprint_sensor_status, 'fingerData': finger_name,
+                               'username': username,
+                               'email': email, 'allow': allow})
+            identity_types.append(3)
+        else:
+            print([finger_name, username, password, email, allow])
+            # データ検証 (进行数据校验)
+            if not all([username, password, email]):
+                # データが不完全 (数据不完整)
+
+                return render(request, 'register.html',
+                              {'errmsg': 'データが不完全', 'is_connect': fingerprint_sensor_status, 'fingerData': finger_name,
+                               'username': username,
+                               'email': email, 'allow': allow})
+
         # メールアドレスを検証(校验邮箱)
         if not re.match(r'^[a-z0-9][\w.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', email):
-            return render(request, 'register.html', {'errmsg': 'メールアドレスのフォーマットが間違っています'})
+            return render(request, 'register.html',
+                          {'errmsg': 'メールアドレスのフォーマットが間違っています', 'is_connect': fingerprint_sensor_status,
+                           'username': username, 'allow': allow})
         if allow != 'on':
-            return render(request, 'register.html', {'errmsg': 'ロボットですか？'})
+            return render(request, 'register.html',
+                          {'errmsg': 'ロボットですか？', 'is_connect': fingerprint_sensor_status, 'fingerData': finger_name,
+                           'username': username,
+                           'email': email, 'allow': allow})
         # ユーザの業務処理を検証します。ユーザ登録を行います。(校验用户业务处理:进行用户注册)
         try:
             user = User.objects.get(identifier=username)
@@ -60,7 +167,10 @@ class RegisterView(View):
             user = None
             print(f'user is none')
         if user:
-            return render(request, 'register.html', {'errmsg': 'ユーザ名は既に存在します'})
+            return render(request, 'register.html',
+                          {'errmsg': 'ユーザ名は既に存在します', 'is_connect': fingerprint_sensor_status,
+                           'finger_data': finger_name, 'email': email,
+                           'allow': allow})
         try:
             check_email = UserInfo.objects.get(email=email)
         except UserInfo.DoesNotExist:
@@ -68,14 +178,22 @@ class RegisterView(View):
             print(f'email is none')
         print(f'user is {type(user)},email is {type(check_email)}')
         if check_email:
-            return render(request, 'register.html', {'errmsg': 'メールは既に存在します'})
+            return render(request, 'register.html',
+                          {'errmsg': 'メールは既に存在します', 'is_connect': fingerprint_sensor_status, 'fingerData': finger_name,
+                           'username': username,
+                           'allow': allow})
 
         if passwordc != password:
-            return render(request, 'register.html', {'errmsg': 'パスワードが一致しません'})
+            return render(request, 'register.html',
+                          {'errmsg': 'パスワードが一致しません', 'is_connect': fingerprint_sensor_status,
+                           'fingerData': finger_name, 'username': username,
+                           'email': email, 'allow': allow})
 
         # 業務処理 (进行业务处理)
-        user = User.objects.create_user(username=username, password=password, identity_type=1, email=email)
+        user = User.objects.create_user(username=username, password=password, identity_type=1,
+                                        email=email, finger_name=finger_name, finger_password=finger_password)
         # user.is_active = 0
+        print(f'user is {type(user)}')
         user.save()
 
         # アクティブなメールを送信します。リンクの有効化を含みます。http：//127.0.0.1：8000/user/active/3
@@ -88,7 +206,7 @@ class RegisterView(View):
         # 加密用户的身份信息，生成激活token
         # TODO (完成)
         serializer = Serializer(settings.SECRET_KEY, 3600)
-        info = {'confirm': user.user_id}
+        info = {'confirm': user.user_id, 'identity_types': identity_types}
         token = serializer.dumps(info)
         token = token.decode()
 
@@ -126,19 +244,22 @@ class ActiveView(View):
 
             # アクティブにするユーザのIDを取得
             user_id = info['confirm']
+            identity_types = info['identity_types']
             with transaction.atomic():
                 # IDからユーザ情報を取得
                 # user = User.objects.get(id=user_id)
                 userinfo = UserInfo.objects.get(id=user_id)
                 userinfo.is_active = True
                 userinfo.save()
-                user = User.objects.get(user_id=userinfo.id)
-                user.is_active = userinfo.is_active
-                user.save()
+                for i in identity_types:
+                    user = User.objects.get(user_id=userinfo.id, identity_type=i)
+                    user.is_active = userinfo.is_active
+                    user.save()
 
             return redirect(reverse('user:login'))
         except SignatureExpired as e:
             '''リンクの有効期限が切れました'''
+
             return HttpResponse('リンクの有効期限が切れました')
         except Exception as e:
             print(f"error is :{e}")
@@ -181,15 +302,29 @@ class LoginView(View):
 
     def get(self, request):
         """ログインページの表示"""
-        #  ユーザ名を覚えているかどうかを判断する
-        if 'username' in request.COOKIES:
-            username = request.COOKIES.get('username')
-            nickname = request.COOKIES.get('nickname')
-            checked = 'checked'
-        else:
-            username = ''
-            nickname = ''
-            checked = ''
+        identity_type = request.GET.get('identity_type')
+        print(identity_type)
+        username = ''
+        nickname = ''
+        checked = ''
+        if identity_type is '1':
+            # ユーザ名を覚えているかどうかを判断する
+            if 'username' in request.COOKIES:
+                username = request.COOKIES.get('username')
+                nickname = request.COOKIES.get('nickname')
+                checked = 'checked'
+            # else:
+            #     username = ''
+            #     nickname = ''
+            #     checked = ''
+
+        elif identity_type is '2':
+            pass
+        elif identity_type is '3':
+            ret = {'status': 'True', 'error': None, 'finger_code': None}
+            ret = get_finger_data(ret)
+            return HttpResponse(json.dumps(ret))
+
         # テンプレートを使う
         return render(request, 'login.html', {'username': username, 'nickname': nickname, 'checked': checked})
 
@@ -200,21 +335,18 @@ class LoginView(View):
         password = ''
         fingerprint_key = ''
         identity_type = request.POST.get('identity_type')
-        print(f'identity_type is {identity_type}')
-        print(type(identity_type))
+
         if identity_type is '1':  # login by password
-            print(f'start get name and password')
             username = request.POST.get('username')
             password = request.POST.get('pwd')
         elif identity_type is '2':
             pass
         elif identity_type is '3':  # login by fingerprint
-            fingerprint_key = 'Set_Key'
-            username = request.POST.get('fingerprint')
-            name_to_pw = username + fingerprint_key
+            fingerprint_key = settings.FILE_CHARSET
+            username = request.POST.get('fingerprintDataLogin')
+            name_to_pw = str(username) + fingerprint_key
             password = hashlib.md5(name_to_pw.encode()).hexdigest()
         # データ検証
-        print(f'name is {username},pass is {password}')
         if not all([username, password]):
             return render(request, 'login.html', {'errmsg': 'データが不完全'})
         print(username, password, fingerprint_key)
@@ -224,20 +356,14 @@ class LoginView(View):
         user = self.my_authenticate(request, username=username, password=password)
 
         if user is not None:
-            print(f"user is not None")
             # the password verified for the user
 
             if user.is_active:
-                print(f"user.is_active is true")
                 # ユーザがアクティブになりました (用户已激活)
                 # ユーザのログイン状態を記録します (记录用户的登录状态)
-                print(f'username is {user.get_username()}, password is {user.password}')
                 login(request, user)
-
-                print(f"requrest.user is {user.get_username()}")
                 #
                 next_url = request.GET.get('next', reverse('home:index'))
-                print(f"get next is {request.GET.get('next')}/n next_url is {next_url}")
 
                 # ユーザーページに移動
                 response = redirect(next_url)  # HttpResponseRedirect

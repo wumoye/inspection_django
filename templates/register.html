@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block head %}
-
-{% endblock head %}
 {% block body %}
     <div class="container-fluid register-container">
-       <div class="logo clearfix">
+        <div class="logo clearfix">
             <a href="{% url 'home:test' %}" class="logo">
                 <img class="rounded-pill rounded-sm" src="{% static 'images/this-is-fine.gif' %}">
             </a>
@@ -17,11 +14,40 @@
                     <a href="{% url 'user:login' %}">ログイン</a>
                 </div>
                 <div class="form_input">
-                    <form action="{% url 'user:register' %}" method="post" id="form">
+                    <form action="{% url 'user:register' %}" method="post" id="formRegister">
                         {% csrf_token %}
                         <div class="form-group">
+
+                            <div class="custom-control custom-switch">
+                                {% if is_connect %}
+                                    <input type="checkbox" class="custom-control-input" id="fingerRegister"
+                                           name="fingerRegister">
+                                    <label class="custom-control-label" for="fingerRegister">指紋</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="fingerRegister"
+                                           name="fingerRegister" disabled>
+                                    <label class="custom-control-label" for="fingerRegister">指紋センサー未接続</label>
+                                {% endif %}
+                                 <lable id="fingerDataShow">{{ fingerData }}</lable>
+                                <input type="hidden" class="col-sm-2 float-sm-none" id="fingerData" name="fingerData"
+                                       hidden
+                                       >
+
+                                <button class="btn btn-primary btn-sm float-sm-right" type="button" id="getFinger"
+                                        hidden>
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                          aria-hidden="true" hidden></span>
+                                    指紋検測
+                                </button>
+                                <div class="spinner-border text-primary" role="status" id="gettingFinger" hidden>
+                                    <span class="sr-only">検測中...</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
                             <input type="text" class="form-control" name="username" id="username"
-                                   aria-describedby="emailHelp"
+                                   aria-describedby="emailHelp" value="{{ username }}"
                                    placeholder="ユーザー名">
                         </div>
                         <div class="form-group">
@@ -33,19 +59,27 @@
                                    placeholder="も一度パスワード">
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email"
+                            <input type="email" class="form-control" name="email" id="email" value="{{ email }}"
                                    aria-describedby="emailHelp"
                                    placeholder="メールアドレス">
                         </div>
+
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" name="allow" id="allow">
+
+                            {% if allow == "on" %}
+                                <input type="checkbox" class="form-check-input" name="allow" id="allow" checked>
+                            {% else %}
+                                <input type="checkbox" class="form-check-input" name="allow" id="allow">
+                            {% endif %}
+
                             <label class="form-check-label" for="allow">私はロボットではありません</label>
                         </div>
                         <button type="submit" id="register" class="btn btn-primary">登　録</button>
                     </form>
-                    {{ errmsg }}
+                    <span id="error_msg" style="color: red">{{ errmsg }}</span>
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock body %}

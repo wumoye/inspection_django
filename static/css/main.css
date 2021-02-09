@@ -141,12 +141,12 @@
 /*login page by password and fingerprint start*/
 .form_input {
     width: 300px;
-    height: 300px;
+    height: 350px;
     left: 10px;
     top: 10px;
     position: relative;
     perspective: 800px;
-    margin: 20px auto;
+    /*margin: 10px auto;*/
 }
 
 .login-flip {
@@ -210,6 +210,6 @@
 
 .test2-width {
     width: 400px;
-
-
 }
+
+.

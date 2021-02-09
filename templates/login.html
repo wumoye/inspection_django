@@ -33,9 +33,9 @@
                 <div class="form_input">
                     <div id="card">
                         <div class="login_by_pw">
-                            <form method="post" id="form">
+                            <form method="post"
+                                  id="form">
                                 {% csrf_token %}
-
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="username" id="username"
                                            aria-describedby="emailHelp"
@@ -49,25 +49,33 @@
                                     <label class="form-check-label" for="remember">ユーザー名を保存</label><br>
                                     <a class="reset_password" href="#">パスワードをお忘れの方</a>
                                 </div>
-                                <input type="hidden" name="identity_type" value="1">
-                                <button type="submit" class="btn btn-primary ">ログイン</button>
+                                <div class="form-group">
+                                    <input type="hidden" name="identity_type" value="1"><br>
+                                    <button type="submit" class="btn btn-primary ">ログイン</button>
+                                </div>
                             </form>
-                            <p>テストアカウント：</p>
-                            <p>username:lee   password:111<br>username:lee2   password:111</p>
                         </div>
                         <div class="login_by_fp">
-                            <form method="post" id="form2">
+                            <form method="post" class="mx-0 justify-content-center align-items-center w-100" id="formLogin">
                                 {% csrf_token %}
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="fingerprint"
-                                           aria-describedby="fingerprintfingerprintHelp"
-                                           placeholder="ユーザー名">
+                                <div class="form-group col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">指紋</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="fingerprintLogin"
+                                               placeholder="指紋獲得中" disabled>
+                                    </div>
                                 </div>
-                                <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+
+                                <div class="spinner-grow text-secondary" style="width: 6rem; height: 6rem;"
+                                     role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                                 <div class="form-group">
                                     <input type="hidden" name="identity_type" value="3">
+                                    <input type="hidden" class="form-control" name="fingerprintDataLogin"
+                                           id="fingerprintDataLogin">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary ">ログイン</button>
