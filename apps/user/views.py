@@ -24,11 +24,12 @@ from django.db.models import Q
 
 import hashlib
 
-
+import time
+import serial
 # Create your views here.
 
 def name_to_psw(input_name):
-    fingerprint_key = settings.FILE_CHARSET
+    fingerprint_key = settings.FINGERPRINT_KEY
     name_to_pw = str(input_name) + fingerprint_key
     return hashlib.md5(name_to_pw.encode()).hexdigest()
 
@@ -43,20 +44,100 @@ def con_status():
 
 def get_finger_code():
     """指紋の番号の獲得"""
-    fingerprint_code = -1
+    try:
+        ser = serial.Serial('/dev/cu.usbmodem14301', 9600)
+        start_time = time.time()
+        time.sleep(5)
+        while True:
+            ser_bmp = ser.readline()
+            ser_bmp = ser_bmp.strip()
+            decoded_bmp = ser_bmp.decode("utf-8")
+            print(decoded_bmp)
+            if decoded_bmp == "Please Type number":
+                ser.write(bytes("1", 'utf-8'))
+            if decoded_bmp == "Please write your choiced number":
+                person_num = UserInfo.objects.count()
+                person_num += 1
+                ser.write(bytes(str(person_num), 'utf-8'))
+            # if Please write your choiced number
+            if decoded_bmp == "Stored!":
+                fingerprint_code = person_num
+                break
+            if decoded_bmp == "error":
+                fingerprint_code = -1
+                break
+            if time.time() - start_time >= 60:
+                fingerprint_code = -1
+                break
+    except serial.serialutil.SerialException:
+        fingerprint_code = -1
+        # fingerprint_code = 10
+    '''
     if con_status():
         # get fingerprint code
         if True:
-            fingerprint_code = 10
+            try:
+                ser=serial.Serial('/dev/cu.usbmodem14301',9600)
+                start_time = time.time()
+                time.sleep(5)
+                while True:
+                    ser_bmp=ser.readline()
+                    ser_bmp=ser_bmp.strip()
+                    decoded_bmp=ser_bmp.decode("utf-8")
+                    if decoded_bmp == "Please Type number":
+                        ser.write(bytes("2",'utf-8'))
+                    if decoded_bmp == "YourFingerID:" :
+                        ser_bmp=ser.readline()
+                        ser_bmp=ser_bmp.strip()
+                        decoded_bmp=ser_bmp.decode("utf-8")
+                        fingerprint_code = int(decoded_bmp)   
+                        break
+                    if decoded_bmp == "error":
+                           break
+            except serial.serialutil.SerialException:
+                fingerprint_code = -1
+            #fingerprint_code = 10
+
         else:
             fingerprint_code = -1
+    '''
 
     return fingerprint_code
-
-
-def get_finger_data(ret):
+def check_finger_code():
+    """指紋の番号の獲得"""
     try:
-        finger_code = get_finger_code()
+        ser=serial.Serial('/dev/cu.usbmodem14301',9600)
+        start_time = time.time()
+        time.sleep(5)
+        while True:
+            ser_bmp=ser.readline()
+            ser_bmp=ser_bmp.strip()
+            decoded_bmp=ser_bmp.decode("utf-8")
+            print(decoded_bmp)
+            if decoded_bmp == "Please Type number":
+                ser.write(bytes("2",'utf-8'))
+            if decoded_bmp == "YourFingerID:" :
+                ser_bmp=ser.readline()
+                ser_bmp=ser_bmp.strip()
+                decoded_bmp=ser_bmp.decode("utf-8")
+                fingerprint_code = int(decoded_bmp)
+                break
+            if decoded_bmp == "error":
+                fingerprint_code = -1
+                break
+            if time.time() - start_time >= 60:
+                fingerprint_code = -1
+                break
+    except serial.serialutil.SerialException:
+        fingerprint_code = -1
+    return fingerprint_code
+
+def get_finger_data(ret,choice):
+    try:
+        if choice == "login":
+            finger_code = check_finger_code()
+        if choice == "register":
+            finger_code = get_finger_code()
         print(f'finger code is {finger_code}')
         if finger_code is None:
             ret['status'] = False
@@ -321,6 +402,7 @@ class LoginView(View):
         elif identity_type is '2':
             pass
         elif identity_type is '3':
+            time.sleep(5)
             ret = {'status': 'True', 'error': None, 'finger_code': None}
             ret = get_finger_data(ret)
             return HttpResponse(json.dumps(ret))

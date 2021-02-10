@@ -1,0 +1,35 @@
+{% extends 'base_haveTopBar.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="container-fluid usercenter-container">
+        
+        <div class="usercenter-content">
+            <h3 class="modal-title" id="">測定結果</h5>
+            <div class="form-group col-sm-6 my-1">
+                <label class="sr-only" for="usercent_change_email">感情数値</label>
+                <p>{{message}}</p>
+                <!--p>性別：{{gender}}</p-->
+            </div>
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <table width = auto height =auto>
+                    <tr>
+                        <th>感情</th>
+                        <th>数値</th>
+                        </tr>
+                        <tr><td>悲しみ:</td><td>{{sadness}}</td></tr>
+                        <tr><td>普通:</td><td>{{neutral}}</td></tr>
+                        <tr><td>侮り:</td><td>{{contempt}}</td></tr>
+                        <tr><td>嫌悪:</td><td>{{disgust}}</td></tr>
+                        <tr><td>怒り:</td><td>{{anger}}</td></tr>
+                        <tr><td>驚き:</td><td>{{surprise}}</td></tr>
+                        <tr><td>恐れ:</td><td>{{fear}}</td></tr>
+                        <tr><td>喜び:</td><td>{{happiness}}</td></tr>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+
+{% endblock body %}

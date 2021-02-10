@@ -2,7 +2,7 @@ import json
 from random import randrange
 
 from django.http import HttpResponse
-from pyecharts.charts import Bar, EffectScatter, Scatter
+from pyecharts.charts import Bar, EffectScatter, Scatter, Grid, Pie
 from pyecharts.faker import Faker
 
 from pyecharts import options as opts
@@ -45,14 +45,14 @@ JsonResponse = json_response
 JsonError = json_error
 
 
-def bar_base() -> Bar:
+def base_bar() -> Bar:
     c = (
         Bar()
-            .add_xaxis(["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"])
-            .add_yaxis("商家A", [randrange(0, 100) for _ in range(6)])
-            .add_yaxis("商家B", [randrange(0, 100) for _ in range(6)])
+            .add_xaxis(["leave1", "leave2", "leave3", "leave4"])
+            .add_yaxis("商家A", [randrange(0, 100) for _ in range(4)])
+            .add_yaxis("商家B", [randrange(0, 100) for _ in range(4)])
             .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
-            .dump_options_with_quotes()
+        # .dump_options_with_quotes()
     )
     return c
 
@@ -112,18 +112,18 @@ def base_scatter(data) -> Scatter:
     c = (
         Scatter()
             .add_xaxis(x_data)
-            .add_yaxis("leave1", y_data[0],)
+            .add_yaxis("leave1", y_data[0])
             .add_yaxis("leave2", y_data[1])
             .add_yaxis("leave3", y_data[2])
             .add_yaxis("leave4", y_data[3])
             .set_global_opts(
             title_opts=opts.TitleOpts(title="疲れ診断結果--分析"),
-            tooltip_opts=opts.TooltipOpts(trigger="axis",axis_pointer_type="cross"),
+            tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="cross"),
             datazoom_opts=[opts.DataZoomOpts()],
             xaxis_opts=opts.AxisOpts(axislabel_opts={"rotate": 45}),
             # title_opts=opts.TitleOpts(title=text),
             visualmap_opts=opts.VisualMapOpts(type_="size", max_=200, min_=1),
         )
-            .dump_options_with_quotes()
+        .dump_options_with_quotes()
     )
     return c

@@ -33,12 +33,25 @@
         </div>
         <div class="container">
             <div class="home-content">
-                <div class="home-content-measure">
-                    <div class="form_input">
+                <div class="shadow-lg p-3 mb-5 bg-white rounded home-content-measure ">
+                    <p>こちらの疲れ度判断サービスは、脈拍を元にお客様の疲れ度を判定しています。
+                        <br><br>
+                        感情測定は、お客様の顔の表情を読み取り、８つの感情の成分を分析します。
+                        悲しみ、侮り、嫌悪、怒り、恐れが1%以上の場合、ストレスを感じていると言えます。
+                        <br><br>
+                        実験用として、医療用ではないセンサー、デバイス使用しています。
+                        ご了承くださいませ。
+                    </p>
+                </div>
+
+                <!--div class="home-content-measure">
+                    <p>こちらの疲れ度判断サービスは、脈拍を元に健康を測定します。
+                    感情測定は、お客様の表情を見て、</p>
+                    div class="form_input">
                         <h2 class="home-content-measure-title">データ増加</h2>
                         {#                        <form action="{% url 'user:index' %}" method="post">#}
                         <form method="post">
-                            {% csrf_token %}
+{#                            {% csrf_token %}#}
                             <div class="form-group">
                                 <input type="number" min="0" max="200" class="form-control" name="pulse" id="pulse"
                                        placeholder="脈拍数入力">
@@ -49,26 +62,48 @@
                                        placeholder="健康レベル入力">
                             </div>
                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#exampleModalCenter" name="" value="脈拍検測">
-                                脈拍検測
+                                    data-target="#exampleModalCenter" name="" value="脈拍測定">
+                                脈拍測定
                             </button>
 
                             <button type="submit" class="btn btn-primary" name="" value="データ増加">
                                 データ増加
                             </button>
                         </form>
-                        <br>
 
                     </div>
-                </div>
-                <div class="home-content-explain">
-                    <p>疲れ具合診断説明</p>
-                    <p>レベル1：</p>
+                </div-->
+                <div class=" home-content-explain">
+{#                    <img src="{% static 'images/health-level.jpg' %}">#}
+                    <table class="shadow-lg p-3 mb-5 bg-white rounded" id="explain-table">
+                        <tr>
+                            <th>レベル</th>
+                            <th>説明</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>良好です</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>普通です</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>かなり疲れています</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>すごく疲れています</td>
+                        </tr>
+                    </table>
+                    <!--p>レベル1：</p>
                     <p>レベル2：</p>
                     <p>レベル3：</p>
-                    <p>レベル4：</p>
+                    <p>レベル4：</p-->
 
                 </div>
+                <br>
                 <div class="home-result">
 
                 </div>
