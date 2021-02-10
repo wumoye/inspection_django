@@ -4,8 +4,8 @@ from django.views.generic import View
 from home.models import MeasurementsResults
 from user.models import User, UserInfo
 
+from utils.echarts import *
 from utils.mixin import LoginRequiredMixin
-
 
 # Create your views here.
 
@@ -66,3 +66,20 @@ class TestView(View):
 class Test2View(View):
     def get(self, request):
         return render(request, 'test2.html')
+
+
+def get_data():
+    return MeasurementsResults.objects.all().select_related().order_by("create_time")
+
+
+class ChartView(View):
+
+    def get(self, request, *args, **kwargs):
+        data = get_data()
+        return JsonResponse(json.loads(base_scatter(data)))
+
+
+class IndexView(View):
+    def get(self, request, *args, **kwargs):
+        print(f'start get indexview')
+        return HttpResponse(content=open("./templates/show_data.html").read())
