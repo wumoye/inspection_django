@@ -157,7 +157,7 @@ class PulseTestView(View):
         message = ''
         data = ' '
         fatigue_level = ''
-        return render(request, 'test2.html', {'message': message, 'data': data})
+        return render(request, 'result_pulse.html', {'message': message, 'data': data})
 
     def post(self, request):
         if request.method == 'POST':

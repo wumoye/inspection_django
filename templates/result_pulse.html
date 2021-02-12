@@ -3,35 +3,34 @@
 {% block head %}
 {% endblock head %}
 {% block body %}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 0dac076fc52f50504bf31e1d3ed23006d7dc8949
-<div class="container-fluid result-pulse-container">
-        
-    <div class="result-pulse-content">
-        <h5 class="modal-title" id="">脈拍検測</h5>
-        <label class="sr-only" for="result-pulse_change_email">脈拍数</label></br>
-<<<<<<< HEAD
-=======
-<div class="container-fluid usercenter-container">
-        
-    <div class="usercenter-content">
-        <h5 class="modal-title" id="">脈拍検測</h5>
-        <label class="sr-only" for="usercent_change_email">脈拍数</label></br>
->>>>>>> 53add01 (update)
-=======
->>>>>>> 0dac076fc52f50504bf31e1d3ed23006d7dc8949
-        <p id ="pulse_message">{{message}}</p>
-        <p>{{data}}</p>
-        <p>{{fatigue_level}}</p>
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
-        </div>
+    <div class="container-fluid result-pulse-container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="result-pulse-content">
+                <h5 class="modal-title" id="">脈拍検測</h5>
+                <div class="form-group col-sm-6 my-1">
+                    <label class="sr-only">脈拍数</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <p>{{ message }}</p>
+                            <p>{{ data }}</p>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-primary" type="submit" name="button_2" value="測定スタート">
+            <!-input class="btn btn-primary" type="submit" name="button_2" value="ボタン2"->
+            </div>
+
+        </form>
+
 
     </div>
-    
-</div>
 
 {% endblock body %}
+
+
+
